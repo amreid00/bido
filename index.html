@@ -74,12 +74,11 @@
     <div class="tab" onclick="switchTab('tracking')">Tracking</div>
   </div>
   <div class="container">
-    <div class="info-box">📊 Dashboard reads from <code>data/dashboard-data.xlsx</code>. Edit the Excel to update content. Sheets: <strong>Products</strong> | <strong>Features</strong> | <strong>Tracking</strong></div>
     <div id="tab-products" class="tab-content active"><h2 class="section-title">Product Catalog</h2><div id="products-stats" class="stats-bar"></div><div class="filter-bar" id="products-filter"></div><div id="products-grid"><div class="loading"><div class="spinner"></div><br>Loading...</div></div></div>
     <div id="tab-features" class="tab-content"><h2 class="section-title">Feature Journeys</h2><div class="filter-bar" id="features-filter"></div><div id="features-grid" class="card-grid"><div class="loading"><div class="spinner"></div><br>Loading...</div></div></div>
     <div id="tab-tracking" class="tab-content"><h2 class="section-title">Tracking &amp; Priority</h2><div class="filter-bar" id="tracking-filter"></div><div class="table-wrapper"><table class="tracker-table"><thead><tr><th>#</th><th>Product</th><th>Priority</th><th>Comments</th><th>Deadline</th><th>Status</th><th>Channel</th><th>Link</th></tr></thead><tbody id="tracking-body"><tr><td colspan="8"><div class="loading"><div class="spinner"></div><br>Loading...</div></td></tr></tbody></table></div></div>
   </div>
-  <footer>Bidaya Fintech — auto-generated from <code>data/dashboard-data.xlsx</code></footer>
+  <footer>Bidaya<code></code></footer>
   <script>
     let allProducts=[],allFeatures=[],allTracking=[];
     async function loadDashboard(){try{const r=await fetch('data/dashboard-data.xlsx');if(!r.ok)throw new Error('Not found');const d=await r.arrayBuffer();const wb=XLSX.read(d,{type:'array'});if(wb.SheetNames.includes('Products')){allProducts=XLSX.utils.sheet_to_json(wb.Sheets['Products']);renderProducts(allProducts)}if(wb.SheetNames.includes('Features')){allFeatures=XLSX.utils.sheet_to_json(wb.Sheets['Features']);renderFeatures(allFeatures)}if(wb.SheetNames.includes('Tracking')){allTracking=XLSX.utils.sheet_to_json(wb.Sheets['Tracking']);renderTracking(allTracking)}}catch(e){document.querySelectorAll('.loading').forEach(el=>{el.innerHTML='<p style="color:#e53e3e">Could not load data/dashboard-data.xlsx — make sure it exists.</p>'})}}
