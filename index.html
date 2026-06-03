@@ -6,253 +6,112 @@
   <title>Bidaya — Wireframe Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f5f6f8; min-height: 100vh; }
-    .header { background: #1a3054; padding: 32px 24px 24px; text-align: center; }
-    .header h1 { color: white; font-size: 28px; font-weight: 600; }
-    .header p { color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 6px; }
-    .header .logo { display: inline-block; width: 40px; height: 40px; background: rgba(255,255,255,0.15); border-radius: 8px; margin-bottom: 12px; line-height: 40px; color: white; font-size: 18px; font-weight: 700; }
-    .tabs { display: flex; justify-content: center; background: #152a48; padding: 0 24px; gap: 0; flex-wrap: wrap; }
-    .tab { padding: 14px 24px; color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
-    .tab:hover { color: white; }
-    .tab.active { color: white; border-bottom-color: #00a7e1; }
-    .container { max-width: 1200px; margin: 24px auto; padding: 0 24px; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .loading { text-align: center; padding: 60px; color: #64656d; font-size: 16px; }
-    .loading .spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid #e6e7ea; border-top-color: #00a7e1; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    /* Cards */
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e6e7ea; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 10px; }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-    .card .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; width: fit-content; }
-    .badge.retail { background: #e6f9f0; color: #00875a; }
-    .badge.sme { background: #f0faff; color: #00a7e1; }
-    .badge.common { background: #f3e8ff; color: #7c3aed; }
-    .badge.after-sales { background: #fff2e6; color: #ff8500; }
-    .card h3 { font-size: 16px; color: #20222f; font-weight: 600; }
-    .card p { font-size: 13px; color: #64656d; line-height: 1.4; }
-    .card .meta { display: flex; gap: 12px; font-size: 11px; color: #64656d; margin-top: auto; padding-top: 10px; border-top: 1px solid #f0f0f0; flex-wrap: wrap; }
-    .card .view-btn { display: inline-flex; align-items: center; gap: 6px; color: #00a7e1; font-size: 13px; font-weight: 500; margin-top: 6px; text-decoration: none; }
-    .card .view-btn:hover { text-decoration: underline; }
-    /* Tracker Table */
-    .table-wrapper { overflow-x: auto; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .tracker-table { width: 100%; border-collapse: collapse; background: white; min-width: 700px; }
-    .tracker-table thead { background: #1a3054; }
-    .tracker-table th { padding: 12px 14px; text-align: left; color: white; font-size: 12px; font-weight: 600; white-space: nowrap; }
-    .tracker-table td { padding: 10px 14px; font-size: 13px; color: #20222f; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
-    .tracker-table tr:hover { background: #f8f9fa; }
-    .tracker-table tr:last-child td { border-bottom: none; }
-    .status-pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-    .status-pill.inprogress { background: #fff2e6; color: #ff8500; }
-    .status-pill.updating { background: #f0faff; color: #00a7e1; }
-    .status-pill.new { background: #e6f9f0; color: #00875a; }
-    .status-pill.done { background: #e6f9f0; color: #00875a; }
-    .priority-dot { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 700; color: white; }
-    .priority-dot.p1 { background: #e53e3e; }
-    .priority-dot.p2 { background: #ff8500; }
-    .priority-dot.p3 { background: #00a7e1; }
-    .priority-dot.p4 { background: #8b5cf6; }
-    .priority-dot.p5 { background: #64656d; }
-    .channel-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: #f0f0f0; color: #64656d; text-transform: capitalize; }
-    .section-title { font-size: 18px; font-weight: 600; color: #1a3054; margin-bottom: 16px; }
-    .filter-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-    .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #e6e7ea; background: white; font-size: 12px; cursor: pointer; color: #64656d; }
-    .filter-btn.active { background: #00a7e1; color: white; border-color: #00a7e1; }
-    .info-box { background: #f0faff; border: 1px solid #00a7e1; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #1a3054; }
-    .info-box code { background: #e6e7ea; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
-    footer { text-align: center; padding: 24px; font-size: 12px; color: #64656d; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#f5f6f8;min-height:100vh}
+    .header{background:#1a3054;padding:32px 24px 24px;text-align:center}
+    .header h1{color:#fff;font-size:28px;font-weight:600}
+    .header p{color:rgba(255,255,255,.7);font-size:14px;margin-top:6px}
+    .header .logo{display:inline-block;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:8px;margin-bottom:12px;line-height:40px;color:#fff;font-size:18px;font-weight:700}
+    .tabs{display:flex;justify-content:center;background:#152a48;padding:0 24px;flex-wrap:wrap}
+    .tab{padding:14px 24px;color:rgba(255,255,255,.6);font-size:14px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;transition:.2s}
+    .tab:hover{color:#fff}.tab.active{color:#fff;border-bottom-color:#00a7e1}
+    .container{max-width:1200px;margin:24px auto;padding:0 24px}
+    .tab-content{display:none}.tab-content.active{display:block}
+    .loading{text-align:center;padding:60px;color:#64656d}
+    .loading .spinner{display:inline-block;width:32px;height:32px;border:3px solid #e6e7ea;border-top-color:#00a7e1;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+  <style>
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+    .card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #e6e7ea;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;gap:10px}
+    .card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .badges{display:flex;gap:6px;flex-wrap:wrap}
+    .badge{display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase}
+    .badge.retail{background:#e6f9f0;color:#00875a}.badge.sme{background:#f0faff;color:#00a7e1}
+    .badge.common{background:#f3e8ff;color:#7c3aed}.badge.after-sales{background:#fff2e6;color:#ff8500}
+    .badge.lending{background:#fef3c7;color:#92400e}.badge.core{background:#e0e7ff;color:#3730a3}
+    .badge.feature{background:#fce7f3;color:#9d174d}
+    .card h3{font-size:16px;color:#20222f;font-weight:600}
+    .card p{font-size:13px;color:#64656d;line-height:1.4}
+    .card .sub-products{font-size:11px;color:#00a7e1;background:#f0faff;padding:4px 8px;border-radius:4px}
+    .card .meta{display:flex;gap:12px;font-size:11px;color:#64656d;margin-top:auto;padding-top:10px;border-top:1px solid #f0f0f0;flex-wrap:wrap;align-items:center}
+    .card .view-btn{display:inline-flex;align-items:center;gap:6px;color:#00a7e1;font-size:13px;font-weight:500;margin-top:6px;text-decoration:none}
+    .card .view-btn:hover{text-decoration:underline}
+    .table-wrapper{overflow-x:auto;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .tracker-table{width:100%;border-collapse:collapse;background:#fff;min-width:700px}
+    .tracker-table thead{background:#1a3054}
+    .tracker-table th{padding:12px 14px;text-align:left;color:#fff;font-size:12px;font-weight:600;white-space:nowrap}
+    .tracker-table td{padding:10px 14px;font-size:13px;color:#20222f;border-bottom:1px solid #f0f0f0;vertical-align:top}
+    .tracker-table tr:hover{background:#f8f9fa}
+    .status-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
+    .status-pill.inprogress{background:#fff2e6;color:#ff8500}
+    .status-pill.updating{background:#f0faff;color:#00a7e1}
+    .status-pill.new{background:#e6f9f0;color:#00875a}
+    .status-pill.live{background:#d1fae5;color:#065f46}
+    .priority-dot{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:700;color:#fff}
+    .priority-dot.p1{background:#e53e3e}.priority-dot.p2{background:#ff8500}.priority-dot.p3{background:#00a7e1}.priority-dot.p4{background:#8b5cf6}.priority-dot.p5{background:#64656d}
+    .channel-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;background:#f0f0f0;color:#64656d;text-transform:capitalize}
+    .section-title{font-size:18px;font-weight:600;color:#1a3054;margin-bottom:16px}
+    .filter-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .filter-btn{padding:6px 14px;border-radius:20px;border:1px solid #e6e7ea;background:#fff;font-size:12px;cursor:pointer;color:#64656d;transition:.2s}
+    .filter-btn:hover{border-color:#00a7e1;color:#00a7e1}
+    .filter-btn.active{background:#00a7e1;color:#fff;border-color:#00a7e1}
+    .info-box{background:#f0faff;border:1px solid #00a7e1;border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#1a3054}
+    .info-box code{background:#e6e7ea;padding:2px 6px;border-radius:4px;font-size:12px}
+    .segment-group{margin-bottom:32px}
+    .segment-group h3{font-size:15px;font-weight:600;color:#64656d;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #e6e7ea}
+    .stats-bar{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+    .stat-chip{background:#fff;border:1px solid #e6e7ea;border-radius:8px;padding:10px 16px;font-size:13px;color:#20222f}
+    .stat-chip strong{color:#00a7e1;font-size:18px;margin-right:4px}
+    footer{text-align:center;padding:24px;font-size:12px;color:#64656d}
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="logo">B</div>
-    <h1>Bidaya Wireframe Dashboard</h1>
-    <p>Product flows, feature journeys &amp; tracking — powered by Excel</p>
-  </div>
+  <div class="header"><div class="logo">B</div><h1>Bidaya Wireframe Dashboard</h1><p>Product catalog, feature journeys &amp; tracking — powered by Excel</p></div>
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('products')">Product Journeys</div>
-    <div class="tab" onclick="switchTab('features')">Feature Journeys</div>
-    <div class="tab" onclick="switchTab('tracking')">Tracking &amp; Priority</div>
+    <div class="tab active" onclick="switchTab('products')">Products</div>
+    <div class="tab" onclick="switchTab('features')">Features</div>
+    <div class="tab" onclick="switchTab('tracking')">Tracking</div>
   </div>
-
   <div class="container">
-    <div class="info-box">
-      📊 This dashboard reads from <code>data/dashboard-data.xlsx</code> in this repo. Edit the Excel file to update content — 3 sheets: <strong>Products</strong>, <strong>Features</strong>, <strong>Tracking</strong>.
-    </div>
-
-    <div id="tab-products" class="tab-content active">
-      <h2 class="section-title">Product Journeys</h2>
-      <div id="products-grid" class="card-grid">
-        <div class="loading"><div class="spinner"></div><br>Loading from Excel...</div>
-      </div>
-    </div>
-
-    <div id="tab-features" class="tab-content">
-      <h2 class="section-title">Feature Journeys</h2>
-      <div id="features-grid" class="card-grid">
-        <div class="loading"><div class="spinner"></div><br>Loading from Excel...</div>
-      </div>
-    </div>
-
-    <div id="tab-tracking" class="tab-content">
-      <h2 class="section-title">Tracking &amp; Priority</h2>
-      <div class="filter-bar">
-        <button class="filter-btn active" onclick="filterTable('all')">All</button>
-        <button class="filter-btn" onclick="filterTable('inprogress')">In Progress</button>
-        <button class="filter-btn" onclick="filterTable('updating')">Updating</button>
-        <button class="filter-btn" onclick="filterTable('new')">New</button>
-        <button class="filter-btn" onclick="filterTable('done')">Done</button>
-      </div>
-      <div class="table-wrapper">
-        <table class="tracker-table" id="tracking-table">
-          <thead><tr><th>#</th><th>Product / Feature</th><th>Priority</th><th>Comments</th><th>Deadline</th><th>Status</th><th>Channel</th><th>Link</th></tr></thead>
-          <tbody id="tracking-body">
-            <tr><td colspan="8"><div class="loading"><div class="spinner"></div><br>Loading from Excel...</div></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <div class="info-box">📊 Dashboard reads from <code>data/dashboard-data.xlsx</code>. Edit the Excel to update content. Sheets: <strong>Products</strong> | <strong>Features</strong> | <strong>Tracking</strong></div>
+    <div id="tab-products" class="tab-content active"><h2 class="section-title">Product Catalog</h2><div id="products-stats" class="stats-bar"></div><div class="filter-bar" id="products-filter"></div><div id="products-grid"><div class="loading"><div class="spinner"></div><br>Loading...</div></div></div>
+    <div id="tab-features" class="tab-content"><h2 class="section-title">Feature Journeys</h2><div class="filter-bar" id="features-filter"></div><div id="features-grid" class="card-grid"><div class="loading"><div class="spinner"></div><br>Loading...</div></div></div>
+    <div id="tab-tracking" class="tab-content"><h2 class="section-title">Tracking &amp; Priority</h2><div class="filter-bar" id="tracking-filter"></div><div class="table-wrapper"><table class="tracker-table"><thead><tr><th>#</th><th>Product</th><th>Priority</th><th>Comments</th><th>Deadline</th><th>Status</th><th>Channel</th><th>Link</th></tr></thead><tbody id="tracking-body"><tr><td colspan="8"><div class="loading"><div class="spinner"></div><br>Loading...</div></td></tr></tbody></table></div></div>
   </div>
-
-  <footer>Bidaya Fintech Platform — Dashboard auto-generated from <code>data/dashboard-data.xlsx</code></footer>
-
+  <footer>Bidaya Fintech — auto-generated from <code>data/dashboard-data.xlsx</code></footer>
   <script>
-    const EXCEL_URL = 'data/dashboard-data.xlsx';
-
-    async function loadDashboard() {
-      try {
-        const response = await fetch(EXCEL_URL);
-        if (!response.ok) throw new Error('Excel file not found');
-        const data = await response.arrayBuffer();
-        const workbook = XLSX.read(data, { type: 'array' });
-
-        // Sheet 1: Products
-        if (workbook.SheetNames.includes('Products')) {
-          const products = XLSX.utils.sheet_to_json(workbook.Sheets['Products']);
-          renderProducts(products);
-        }
-
-        // Sheet 2: Features
-        if (workbook.SheetNames.includes('Features')) {
-          const features = XLSX.utils.sheet_to_json(workbook.Sheets['Features']);
-          renderFeatures(features);
-        }
-
-        // Sheet 3: Tracking
-        if (workbook.SheetNames.includes('Tracking')) {
-          const tracking = XLSX.utils.sheet_to_json(workbook.Sheets['Tracking']);
-          renderTracking(tracking);
-        }
-      } catch (err) {
-        console.error('Error loading Excel:', err);
-        document.querySelectorAll('.loading').forEach(el => {
-          el.innerHTML = '⚠️ Could not load <code>data/dashboard-data.xlsx</code>. Please make sure the file exists in the repo.';
-        });
-      }
+    let allProducts=[],allFeatures=[],allTracking=[];
+    async function loadDashboard(){try{const r=await fetch('data/dashboard-data.xlsx');if(!r.ok)throw new Error('Not found');const d=await r.arrayBuffer();const wb=XLSX.read(d,{type:'array'});if(wb.SheetNames.includes('Products')){allProducts=XLSX.utils.sheet_to_json(wb.Sheets['Products']);renderProducts(allProducts)}if(wb.SheetNames.includes('Features')){allFeatures=XLSX.utils.sheet_to_json(wb.Sheets['Features']);renderFeatures(allFeatures)}if(wb.SheetNames.includes('Tracking')){allTracking=XLSX.utils.sheet_to_json(wb.Sheets['Tracking']);renderTracking(allTracking)}}catch(e){document.querySelectorAll('.loading').forEach(el=>{el.innerHTML='<p style="color:#e53e3e">Could not load data/dashboard-data.xlsx — make sure it exists.</p>'})}}
+    function bc(v){if(!v)return'common';const l=v.toLowerCase();if(l.includes('retail'))return'retail';if(l.includes('sme'))return'sme';if(l.includes('after'))return'after-sales';if(l.includes('lend'))return'lending';if(l.includes('core'))return'core';if(l.includes('feature'))return'feature';return'common'}
+    function sc(s){if(!s)return'new';const v=s.toLowerCase();if(v.includes('progress'))return'inprogress';if(v.includes('updat'))return'updating';if(v.includes('live')||v.includes('done'))return'live';return'new'}
+    function pc(p){const n=parseInt(p);if(n===1)return'p1';if(n===2)return'p2';if(n===3)return'p3';if(n===4)return'p4';return'p5'}
+    function renderProducts(rows){
+      const segs=[...new Set(rows.map(r=>r.Segment||'Other'))];
+      document.getElementById('products-stats').innerHTML=`<div class="stat-chip"><strong>${rows.length}</strong> Products</div>`+segs.map(s=>`<div class="stat-chip"><strong>${rows.filter(r=>(r.Segment||'Other')===s).length}</strong> ${s}</div>`).join('');
+      document.getElementById('products-filter').innerHTML=`<button class="filter-btn active" onclick="fprod('all')">All</button>`+segs.map(s=>`<button class="filter-btn" onclick="fprod('${s}')">${s}</button>`).join('');
+      rpCards(rows);
     }
-
-    function getBadgeClass(category) {
-      if (!category) return 'common';
-      const c = category.toLowerCase();
-      if (c.includes('retail')) return 'retail';
-      if (c.includes('sme')) return 'sme';
-      if (c.includes('after')) return 'after-sales';
-      return 'common';
+    function rpCards(rows){
+      const segs=[...new Set(rows.map(r=>r.Segment||'Other'))];
+      document.getElementById('products-grid').innerHTML=segs.map(seg=>`<div class="segment-group"><h3>${seg} (${rows.filter(r=>(r.Segment||'Other')===seg).length})</h3><div class="card-grid">${rows.filter(r=>(r.Segment||'Other')===seg).map(row=>`<div class="card"><div class="badges"><span class="badge ${bc(row.Segment)}">${row.Segment||''}</span>${row.Category?`<span class="badge ${bc(row.Category)}">${row.Category}</span>`:''}</div><h3>${row.Name||''}</h3><p>${row.Description||''}</p>${row['Sub-Products']?`<div class="sub-products">${row['Sub-Products']}</div>`:''}<div class="meta">${row.Channel?`<span>${row.Channel}</span>`:''}${row.MVP?`<span>${row.MVP}</span>`:''}${row.Status?`<span class="status-pill ${sc(row.Status)}">${row.Status}</span>`:''}${row.Priority?`<span class="priority-dot ${pc(row.Priority)}">${row.Priority}</span>`:''}</div>${row.Link?`<a href="${row.Link}" class="view-btn">View Flow →</a>`:''}</div>`).join('')}</div></div>`).join('');
     }
-
-    function getStatusClass(status) {
-      if (!status) return 'new';
-      const s = status.toLowerCase().replace(/\s/g, '');
-      if (s.includes('progress')) return 'inprogress';
-      if (s.includes('updat')) return 'updating';
-      if (s.includes('done') || s.includes('complete')) return 'done';
-      return 'new';
+    function fprod(seg){document.querySelectorAll('#products-filter .filter-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');if(seg==='all')rpCards(allProducts);else rpCards(allProducts.filter(r=>(r.Segment||'Other')===seg))}
+    function renderFeatures(rows){
+      const cats=[...new Set(rows.map(r=>r.Category||'Other'))];
+      document.getElementById('features-filter').innerHTML=`<button class="filter-btn active" onclick="ffeat('all')">All</button>`+cats.map(c=>`<button class="filter-btn" onclick="ffeat('${c}')">${c}</button>`).join('');
+      rfCards(rows);
     }
-
-    function getPriorityClass(p) {
-      if (!p) return '';
-      const n = parseInt(p);
-      if (n === 1) return 'p1';
-      if (n === 2) return 'p2';
-      if (n === 3) return 'p3';
-      if (n === 4) return 'p4';
-      return 'p5';
+    function rfCards(rows){document.getElementById('features-grid').innerHTML=rows.map(row=>`<div class="card"><span class="badge ${bc(row.Category)}">${row.Category||''}</span><h3>${row.Name||''}</h3><p>${row.Description||''}</p><div class="meta">${row.Channel?`<span>${row.Channel}</span>`:''}${row.Status?`<span class="status-pill ${sc(row.Status)}">${row.Status}</span>`:''}${row.Priority?`<span class="priority-dot ${pc(row.Priority)}">${row.Priority}</span>`:''}</div>${row.Link?`<a href="${row.Link}" class="view-btn">View Wireframe →</a>`:''}</div>`).join('')}
+    function ffeat(cat){document.querySelectorAll('#features-filter .filter-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');if(cat==='all')rfCards(allFeatures);else rfCards(allFeatures.filter(r=>(r.Category||'Other')===cat))}
+    function renderTracking(rows){
+      const sts=[...new Set(rows.map(r=>sc(r.Status)))];
+      document.getElementById('tracking-filter').innerHTML=`<button class="filter-btn active" onclick="ftrack('all')">All</button>`+sts.map(s=>`<button class="filter-btn" onclick="ftrack('${s}')">${s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('');
+      rtRows(rows);
     }
-
-    function renderProducts(rows) {
-      const grid = document.getElementById('products-grid');
-      if (!rows.length) { grid.innerHTML = '<p>No products found in Excel.</p>'; return; }
-      grid.innerHTML = rows.map(row => `
-        <div class="card">
-          <span class="badge ${getBadgeClass(row.Category)}">${row.Category || 'General'}</span>
-          <h3>${row.Name || ''}</h3>
-          <p>${row.Description || ''}</p>
-          <div class="meta">
-            ${row.Channel ? `<span>${row.Channel}</span>` : ''}
-            ${row.Status ? `<span>${row.Status}</span>` : ''}
-            ${row.Priority ? `<span>Priority ${row.Priority}</span>` : ''}
-          </div>
-          ${row.Link ? `<a href="${row.Link}" class="view-btn">View Flow →</a>` : ''}
-        </div>
-      `).join('');
-    }
-
-    function renderFeatures(rows) {
-      const grid = document.getElementById('features-grid');
-      if (!rows.length) { grid.innerHTML = '<p>No features found in Excel.</p>'; return; }
-      grid.innerHTML = rows.map(row => `
-        <div class="card">
-          <span class="badge ${getBadgeClass(row.Category)}">${row.Category || 'General'}</span>
-          <h3>${row.Name || ''}</h3>
-          <p>${row.Description || ''}</p>
-          <div class="meta">
-            ${row.Channel ? `<span>${row.Channel}</span>` : ''}
-            ${row.Status ? `<span>${row.Status}</span>` : ''}
-            ${row.Priority ? `<span>Priority ${row.Priority}</span>` : ''}
-          </div>
-          ${row.Link ? `<a href="${row.Link}" class="view-btn">View Wireframe →</a>` : ''}
-        </div>
-      `).join('');
-    }
-
-    function renderTracking(rows) {
-      const tbody = document.getElementById('tracking-body');
-      if (!rows.length) { tbody.innerHTML = '<tr><td colspan="8">No tracking data found.</td></tr>'; return; }
-      tbody.innerHTML = rows.map((row, i) => {
-        const statusClass = getStatusClass(row.Status);
-        const prioClass = getPriorityClass(row.Priority);
-        return `<tr data-status="${statusClass}">
-          <td>${i + 1}</td>
-          <td><strong>${row.Product || row.Name || ''}</strong></td>
-          <td>${row.Priority ? `<span class="priority-dot ${prioClass}">${row.Priority}</span>` : ''}</td>
-          <td>${row.Comments || ''}</td>
-          <td>${row.Deadline || ''}</td>
-          <td><span class="status-pill ${statusClass}">${row.Status || 'New'}</span></td>
-          <td>${row.Channel ? `<span class="channel-tag">${row.Channel}</span>` : ''}</td>
-          <td>${row.Link ? `<a href="${row.Link}" class="view-btn">Open →</a>` : ''}</td>
-        </tr>`;
-      }).join('');
-    }
-
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById('tab-' + tabName).classList.add('active');
-    }
-
-    function filterTable(status) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-      document.querySelectorAll('#tracking-body tr').forEach(row => {
-        if (status === 'all') { row.style.display = ''; }
-        else { row.style.display = row.dataset.status === status ? '' : 'none'; }
-      });
-    }
-
-    // Load on page ready
+    function rtRows(rows){document.getElementById('tracking-body').innerHTML=rows.map((row,i)=>{const s=sc(row.Status),p=pc(row.Priority);return`<tr data-status="${s}"><td>${i+1}</td><td><strong>${row.Product||row.Name||''}</strong></td><td>${row.Priority?`<span class="priority-dot ${p}">${row.Priority}</span>`:''}</td><td>${row.Comments||''}</td><td>${row.Deadline||''}</td><td><span class="status-pill ${s}">${row.Status||'New'}</span></td><td>${row.Channel?`<span class="channel-tag">${row.Channel}</span>`:''}</td><td>${row.Link?`<a href="${row.Link}" class="view-btn">Open →</a>`:''}</td></tr>`}).join('')}
+    function ftrack(status){document.querySelectorAll('#tracking-filter .filter-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');document.querySelectorAll('#tracking-body tr').forEach(row=>{row.style.display=(status==='all'||row.dataset.status===status)?'':'none'})}
+    function switchTab(name){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));event.target.classList.add('active');document.getElementById('tab-'+name).classList.add('active')}
     loadDashboard();
   </script>
 </body>
