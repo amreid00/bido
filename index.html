@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bidaya — Wireframe Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f6f8; min-height: 100vh; }
+    .header { background: #1a3054; padding: 40px 24px 32px; text-align: center; }
+    .header h1 { color: white; font-size: 32px; font-weight: 600; letter-spacing: -0.5px; }
+    .header p { color: rgba(255,255,255,0.7); font-size: 16px; margin-top: 8px; }
+    .header .logo { display: inline-block; width: 48px; height: 48px; background: rgba(255,255,255,0.15); border-radius: 8px; margin-bottom: 16px; line-height: 48px; color: white; font-size: 20px; font-weight: 700; }
+    .container { max-width: 1000px; margin: -24px auto 40px; padding: 0 24px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e6e7ea; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 12px; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .card .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; width: fit-content; }
+    .badge.retail { background: #e6f9f0; color: #00875a; }
+    .badge.common { background: #f0faff; color: #00a7e1; }
+    .badge.after-sales { background: #fff2e6; color: #ff8500; }
+    .card h3 { font-size: 18px; color: #20222f; font-weight: 600; }
+    .card p { font-size: 14px; color: #64656d; line-height: 1.5; }
+    .card .meta { display: flex; gap: 16px; font-size: 12px; color: #64656d; margin-top: auto; padding-top: 12px; border-top: 1px solid #f0f0f0; }
+    .card .view-btn { display: inline-flex; align-items: center; gap: 6px; color: #00a7e1; font-size: 14px; font-weight: 500; margin-top: 8px; text-decoration: none; }
+    .card .view-btn:hover { text-decoration: underline; }
+    .stats { display: flex; gap: 24px; justify-content: center; margin-top: 20px; margin-bottom: 32px; flex-wrap: wrap; }
+    .stat { background: white; border-radius: 8px; padding: 16px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e6e7ea; text-align: center; }
+    .stat .number { font-size: 28px; font-weight: 700; color: #00a7e1; }
+    .stat .label { font-size: 12px; color: #64656d; margin-top: 4px; }
+    footer { text-align: center; padding: 24px; font-size: 12px; color: #64656d; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">B</div>
+    <h1>Bidaya Wireframe Dashboard</h1>
+    <p>All wireframe flows for mobile app screens — click to view</p>
+  </div>
+  <div class="container">
+    <div class="stats">
+      <div class="stat"><div class="number">1</div><div class="label">Total Flows</div></div>
+      <div class="stat"><div class="number">12</div><div class="label">Screens</div></div>
+      <div class="stat"><div class="number">6</div><div class="label">Error States</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <span class="badge after-sales">After Sales</span>
+        <h3>Refund Process</h3>
+        <p>User requests a refund from their Virtual Account linked to a deal. Includes IBAN selection, fee payment, and error handling.</p>
+        <div class="meta">
+          <span>6 happy-path screens</span>
+          <span>6 error states</span>
+        </div>
+        <a href="flows/refund-process.html" class="view-btn">View Wireframe →</a>
+      </div>
+      <div class="card" style="border-style: dashed; opacity: 0.5;">
+        <span class="badge retail">Retail</span>
+        <h3>Early Settlement</h3>
+        <p>Coming soon — Early settlement flow for personal finance deals.</p>
+        <div class="meta"><span>Planned</span></div>
+      </div>
+      <div class="card" style="border-style: dashed; opacity: 0.5;">
+        <span class="badge retail">Retail</span>
+        <h3>Partial Settlement</h3>
+        <p>Coming soon — Partial settlement payment flow.</p>
+        <div class="meta"><span>Planned</span></div>
+      </div>
+    </div>
+  </div>
+  <footer>Bidaya Fintech Platform — Wireframe Repository</footer>
+</body>
+</html>
