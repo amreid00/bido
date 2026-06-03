@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bidaya - Refund Process Wireframe Flow</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f0f0; padding: 40px; }
+    .flow-container { display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; align-items: flex-start; }
+    .screen-wrapper { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .screen-label { font-size: 14px; font-weight: 600; color: #333; background: #e0e0e0; padding: 6px 16px; border-radius: 20px; }
+    .phone-frame { width: 375px; height: 812px; border-radius: 40px; overflow: hidden; background: #1a3054; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .status-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color: white; font-size: 12px; font-weight: 600; }
+    .status-bar .time { font-size: 15px; font-weight: 600; }
+    .status-bar .icons { display: flex; gap: 4px; align-items: center; }
+</style>
+    <style>
+    .header { display: flex; align-items: center; justify-content: space-between; padding: 16px; }
+    .header .back-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; cursor: pointer; }
+    .header .logo { width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 700; }
+    .header .header-icons { display: flex; gap: 8px; }
+    .header .header-icons span { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; }
+    .page-title { padding: 0 16px 24px; display: flex; align-items: center; gap: 4px; color: white; }
+    .page-title .chevron { font-size: 20px; opacity: 0.8; }
+    .page-title h1 { font-size: 24px; font-weight: 500; letter-spacing: -0.3px; }
+    .panel { background: #fafafa; border-radius: 16px 16px 0 0; flex: 1; padding: 24px 16px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
+    .panel-subtitle { font-size: 16px; font-weight: 500; color: #20222f; }
+    .info-banner { background: #fff2e6; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; }
+    .info-banner .icon { color: #ff8500; font-size: 16px; }
+    .info-banner p { font-size: 12px; color: #ff8500; line-height: 1.4; }
+    .field-group { display: flex; flex-direction: column; gap: 8px; }
+    .field-label { font-size: 12px; font-weight: 500; color: #64656d; }
+    .field-label.disabled { color: #d1d1d1; }
+</style>
+    <style>
+    .text-input { background: white; border: 1px solid #e6e7ea; border-radius: 8px; padding: 12px 16px; font-size: 16px; color: #20222f; display: flex; align-items: center; justify-content: space-between; min-height: 48px; }
+    .text-input.disabled { color: #d1d1d1; }
+    .text-input .trailing-icon { opacity: 0.38; font-size: 20px; color: #64656d; }
+    .text-input.editable { border-color: #00a7e1; }
+    .amount-display { background: white; border: 1px solid #e6e7ea; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+    .amount-display .label { font-size: 12px; color: #64656d; }
+    .amount-display .value { font-size: 22px; font-weight: 600; color: #20222f; }
+    .amount-display .currency { font-size: 14px; color: #64656d; font-weight: 400; }
+    .btn-primary { background: #00a7e1; color: white; border: none; border-radius: 8px; padding: 12px 16px; font-size: 14px; font-weight: 500; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: transparent; border: 1px solid #e6e7ea; border-radius: 8px; padding: 12px 16px; font-size: 14px; font-weight: 500; color: #20222f; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .radio-group { display: flex; flex-direction: column; gap: 12px; }
+    .radio-item { background: white; border: 1px solid #e6e7ea; border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .radio-item.selected { border-color: #00a7e1; background: #f0faff; }
+    .radio-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d1d1d1; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .radio-item.selected .radio-circle { border-color: #00a7e1; }
+    .radio-item.selected .radio-circle::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #00a7e1; }
+    .radio-item .iban-text { font-size: 14px; color: #20222f; }
+    .radio-item .bank-name { font-size: 12px; color: #64656d; margin-top: 2px; }
+</style>
+    <style>
+    .add-new-btn { border: 1px dashed #00a7e1; border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 8px; color: #00a7e1; font-size: 14px; font-weight: 500; cursor: pointer; background: transparent; width: 100%; }
+    .add-new-btn .plus { font-size: 18px; }
+    .fee-summary { background: white; border: 1px solid #e6e7ea; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .fee-row { display: flex; justify-content: space-between; align-items: center; }
+    .fee-row .label { font-size: 14px; color: #64656d; }
+    .fee-row .value { font-size: 14px; font-weight: 500; color: #20222f; }
+    .fee-row.total { border-top: 1px solid #e6e7ea; padding-top: 12px; }
+    .fee-row.total .label { font-weight: 600; color: #20222f; }
+    .fee-row.total .value { font-weight: 600; color: #00a7e1; font-size: 16px; }
+    .success-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; text-align: center; padding: 40px; }
+    .success-icon { width: 80px; height: 80px; border-radius: 50%; background: #e6f9f0; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    .success-title { font-size: 20px; font-weight: 600; color: #20222f; }
+    .success-subtitle { font-size: 14px; color: #64656d; line-height: 1.5; }
+    .progress-badge { background: #fff2e6; border-radius: 20px; padding: 6px 16px; font-size: 12px; color: #ff8500; font-weight: 500; }
+    .deal-card { background: white; border: 1px solid #e6e7ea; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .deal-card .deal-id { font-size: 12px; color: #64656d; }
+    .deal-card .deal-value { font-size: 14px; font-weight: 500; color: #20222f; }
+    .section-title { font-size: 14px; font-weight: 600; color: #20222f; margin-bottom: 4px; }
+</style>
+    <style>
+    /* Error/Popup styles */
+    .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: flex-end; justify-content: center; z-index: 10; border-radius: 40px; }
+    .popup { background: white; border-radius: 16px 16px 0 0; padding: 24px 16px 32px; width: 100%; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; }
+    .popup .popup-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+    .popup .popup-icon.error { background: #ffe5e5; color: #e53e3e; }
+    .popup .popup-icon.warning { background: #fff2e6; color: #ff8500; }
+    .popup .popup-title { font-size: 18px; font-weight: 600; color: #20222f; }
+    .popup .popup-msg { font-size: 14px; color: #64656d; line-height: 1.5; }
+    .popup .popup-btn { background: #00a7e1; color: white; border: none; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 500; width: 100%; cursor: pointer; }
+    .popup .popup-btn.secondary { background: transparent; border: 1px solid #e6e7ea; color: #20222f; }
+
+    .verification-badge { background: #e6f9f0; border-radius: 4px; padding: 4px 8px; font-size: 11px; color: #00875a; font-weight: 500; }
+    .error-text { font-size: 12px; color: #e53e3e; margin-top: 4px; }
+    h2.flow-title { text-align: center; font-size: 28px; color: #1a3054; margin-bottom: 16px; }
+    p.flow-desc { text-align: center; font-size: 16px; color: #64656d; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .section-divider { width: 100%; text-align: center; padding: 32px 0 16px; font-size: 20px; font-weight: 600; color: #1a3054; border-top: 2px solid #e6e7ea; margin-top: 40px; }
+    </style>
+</head>
+<body>
+  <h2 class="flow-title">Bidaya — Refund Process Wireframe Flow</h2>
+  <p class="flow-desc">User selects Refund service → Views VA balance for deal → Enters refund amount → Selects/Adds IBAN → Pays fees → Success confirmation</p>
+
+  <div class="flow-container">
+
+    <!-- SCREEN 1: Select Refund Service -->
+    <div class="screen-wrapper">
+      <span class="screen-label">1. Select Refund Service</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>After Sales Services</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Select a service</p>
+          <div class="radio-group">
+            <div class="radio-item">
+              <div class="radio-circle"></div>
+              <div>
+                <div class="iban-text">Early Settlement</div>
+                <div class="bank-name">Settle your financing early</div>
+              </div>
+            </div>
+            <div class="radio-item">
+              <div class="radio-circle"></div>
+              <div>
+                <div class="iban-text">Partial Settlement</div>
+                <div class="bank-name">Make a partial payment</div>
+              </div>
+            </div>
+            <div class="radio-item selected">
+              <div class="radio-circle"></div>
+              <div>
+                <div class="iban-text">Refund</div>
+                <div class="bank-name">Request a refund from your VA</div>
+              </div>
+            </div>
+            <div class="radio-item">
+              <div class="radio-circle"></div>
+              <div>
+                <div class="iban-text">Reschedule Payment</div>
+                <div class="bank-name">Change payment due date</div>
+              </div>
+            </div>
+          </div>
+          <div style="flex:1"></div>
+          <button class="btn-primary">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: Deal & VA Balance -->
+    <div class="screen-wrapper">
+      <span class="screen-label">2. Deal Info & VA Balance</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Your Deal Details</p>
+          <div class="deal-card">
+            <div class="deal-id">Deal ID: <strong>#PF-2024-00891</strong></div>
+            <div class="deal-value">Personal Finance — SAR 150,000</div>
+            <div style="font-size:12px;color:#64656d;">Start Date: 15 Jan 2024</div>
+          </div>
+          <div class="section-title">Available VA Balance</div>
+          <div class="amount-display">
+            <span class="label">Virtual Account Balance for this Deal</span>
+            <span class="value">SAR 12,500.00 <span class="currency"></span></span>
+          </div>
+          <div class="info-banner">
+            <span class="icon">ⓘ</span>
+            <p>This is the available amount in your Virtual Account linked to this deal that can be refunded.</p>
+          </div>
+          <div style="flex:1"></div>
+          <button class="btn-primary">Continue to Refund</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Enter Refund Amount -->
+    <div class="screen-wrapper">
+      <span class="screen-label">3. Enter Refund Amount</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Enter Refund Amount</p>
+          <div class="info-banner">
+            <span class="icon">ⓘ</span>
+            <p>Maximum refundable amount: <strong>SAR 12,500.00</strong></p>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Refund Amount (SAR)</label>
+            <div class="text-input editable">
+              <span>5,000.00</span>
+              <span class="trailing-icon">✎</span>
+            </div>
+          </div>
+          <div class="deal-card" style="background:#f0faff;border-color:#00a7e1;">
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:12px;color:#64656d;">Available Balance</span>
+              <span style="font-size:14px;font-weight:500;color:#20222f;">SAR 12,500.00</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:12px;color:#64656d;">Requested Refund</span>
+              <span style="font-size:14px;font-weight:500;color:#00a7e1;">SAR 5,000.00</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;border-top:1px solid #e6e7ea;padding-top:8px;">
+              <span style="font-size:12px;color:#64656d;">Remaining after Refund</span>
+              <span style="font-size:14px;font-weight:500;color:#20222f;">SAR 7,500.00</span>
+            </div>
+          </div>
+          <div style="flex:1"></div>
+          <button class="btn-primary">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: Select / Add IBAN -->
+    <div class="screen-wrapper">
+      <span class="screen-label">4. Select IBAN</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Select IBAN for Refund</p>
+          <p style="font-size:12px;color:#64656d;">Choose an existing IBAN or add a new one to receive the refund.</p>
+          <div class="radio-group">
+            <div class="radio-item selected">
+              <div class="radio-circle"></div>
+              <div style="flex:1;">
+                <div class="iban-text">SA03 8000 0000 6080 1016 7519</div>
+                <div class="bank-name">Al Rajhi Bank</div>
+              </div>
+              <span class="verification-badge">✓ Verified</span>
+            </div>
+            <div class="radio-item">
+              <div class="radio-circle"></div>
+              <div style="flex:1;">
+                <div class="iban-text">SA44 2000 0001 2345 6789 0123</div>
+                <div class="bank-name">Saudi National Bank (SNB)</div>
+              </div>
+              <span class="verification-badge">✓ Verified</span>
+            </div>
+          </div>
+          <button class="add-new-btn">
+            <span class="plus">+</span> Add New IBAN
+          </button>
+          <div style="flex:1"></div>
+          <button class="btn-primary">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 4b: Add New IBAN -->
+    <div class="screen-wrapper">
+      <span class="screen-label">4b. Add New IBAN</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Add New IBAN</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Enter your IBAN details</p>
+          <div class="info-banner">
+            <span class="icon">ⓘ</span>
+            <p>IBAN must be under your name and will be verified before proceeding.</p>
+          </div>
+          <div class="field-group">
+            <label class="field-label">IBAN Number</label>
+            <div class="text-input editable">
+              <span style="color:#d1d1d1;">SA__ ____ ____ ____ ____ ____</span>
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Account Holder Name</label>
+            <div class="text-input disabled">
+              <span>Khaled Al-Mansour</span>
+              <span style="font-size:11px;color:#64656d;">Auto-filled</span>
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Bank Name</label>
+            <div class="text-input disabled">
+              <span style="color:#d1d1d1;">Auto-detected from IBAN</span>
+            </div>
+          </div>
+          <div style="flex:1"></div>
+          <button class="btn-primary">Verify & Add IBAN</button>
+          <button class="btn-secondary" style="margin-top:8px;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 5: Pay Fees -->
+    <div class="screen-wrapper">
+      <span class="screen-label">5. Pay Refund Fees</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Review & Pay Fees</p>
+          <div class="fee-summary">
+            <div class="fee-row">
+              <span class="label">Refund Amount</span>
+              <span class="value">SAR 5,000.00</span>
+            </div>
+            <div class="fee-row">
+              <span class="label">Transfer to IBAN</span>
+              <span class="value">SA03 80•••7519</span>
+            </div>
+            <div class="fee-row">
+              <span class="label">Processing Fee</span>
+              <span class="value">SAR 50.00</span>
+            </div>
+            <div class="fee-row">
+              <span class="label">VAT (15%)</span>
+              <span class="value">SAR 7.50</span>
+            </div>
+            <div class="fee-row total">
+              <span class="label">Total Fees to Pay</span>
+              <span class="value">SAR 57.50</span>
+            </div>
+          </div>
+          <div class="info-banner">
+            <span class="icon">ⓘ</span>
+            <p>Fees will be deducted from your primary account. Refund will be processed within 2–3 business days.</p>
+          </div>
+          <div style="flex:1"></div>
+          <button class="btn-primary">💳 Pay Fees & Submit Refund</button>
+          <button class="btn-secondary" style="margin-top:8px;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 6: Success -->
+    <div class="screen-wrapper">
+      <span class="screen-label">6. Success — In Progress</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn" style="visibility:hidden;">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="panel" style="border-radius:16px 16px 0 0;justify-content:center;align-items:center;">
+          <div class="success-container">
+            <div class="success-icon">✓</div>
+            <h2 class="success-title">Refund Request Submitted</h2>
+            <span class="progress-badge">⏳ In Progress</span>
+            <p class="success-subtitle">Your refund of <strong>SAR 5,000.00</strong> is being processed and will be transferred to your IBAN ending in <strong>7519</strong> within 2–3 business days.</p>
+            <div class="deal-card" style="width:100%;margin-top:16px;">
+              <div class="fee-row">
+                <span class="label">Reference No.</span>
+                <span class="value">#REF-2024-04521</span>
+              </div>
+              <div class="fee-row">
+                <span class="label">Deal ID</span>
+                <span class="value">#PF-2024-00891</span>
+              </div>
+              <div class="fee-row">
+                <span class="label">Amount</span>
+                <span class="value">SAR 5,000.00</span>
+              </div>
+              <div class="fee-row">
+                <span class="label">Fees Paid</span>
+                <span class="value">SAR 57.50</span>
+              </div>
+            </div>
+            <button class="btn-primary" style="margin-top:24px;">Back to Home</button>
+            <button class="btn-secondary" style="margin-top:8px;">View My Requests</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end flow-container -->
+
+  <!-- ERROR STATES SECTION -->
+  <div class="section-divider">Error States & Edge Cases</div>
+
+  <div class="flow-container">
+
+    <!-- ERROR 1: No Amount on VA -->
+    <div class="screen-wrapper">
+      <span class="screen-label">ERR-1: No VA Balance</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Your Deal Details</p>
+          <div class="deal-card">
+            <div class="deal-id">Deal ID: <strong>#PF-2024-00891</strong></div>
+            <div class="deal-value">Personal Finance — SAR 150,000</div>
+          </div>
+          <div class="amount-display" style="border-color:#e53e3e;">
+            <span class="label">Virtual Account Balance</span>
+            <span class="value" style="color:#e53e3e;">SAR 0.00</span>
+          </div>
+        </div>
+        <!-- Popup Overlay -->
+        <div class="overlay">
+          <div class="popup">
+            <div class="popup-icon error">✕</div>
+            <h3 class="popup-title">No Refundable Amount</h3>
+            <p class="popup-msg">There is no available balance in your Virtual Account for this deal. A refund cannot be processed at this time.</p>
+            <button class="popup-btn">Go Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERROR 2: Amount Exceeds Balance -->
+    <div class="screen-wrapper">
+      <span class="screen-label">ERR-2: Exceeds VA Balance</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Enter Refund Amount</p>
+          <div class="field-group">
+            <label class="field-label">Refund Amount (SAR)</label>
+            <div class="text-input editable" style="border-color:#e53e3e;">
+              <span style="color:#e53e3e;">15,000.00</span>
+            </div>
+            <span class="error-text">⚠ Amount exceeds available balance of SAR 12,500.00</span>
+          </div>
+          <div class="amount-display">
+            <span class="label">Available VA Balance</span>
+            <span class="value">SAR 12,500.00</span>
+          </div>
+        </div>
+        <!-- Popup Overlay -->
+        <div class="overlay">
+          <div class="popup">
+            <div class="popup-icon error">✕</div>
+            <h3 class="popup-title">Amount Exceeds Balance</h3>
+            <p class="popup-msg">The requested refund amount (SAR 15,000.00) exceeds your available VA balance (SAR 12,500.00). Please enter an amount equal to or less than the available balance.</p>
+            <button class="popup-btn">Adjust Amount</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERROR 3: IBAN Verification Failed -->
+    <div class="screen-wrapper">
+      <span class="screen-label">ERR-3: IBAN Verification Failed</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Add New IBAN</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Enter your IBAN details</p>
+          <div class="field-group">
+            <label class="field-label">IBAN Number</label>
+            <div class="text-input" style="border-color:#e53e3e;">
+              <span style="color:#e53e3e;">SA12 3456 7890 1234 5678 9012</span>
+            </div>
+            <span class="error-text">⚠ IBAN verification failed — name mismatch</span>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Account Holder Name</label>
+            <div class="text-input disabled">
+              <span>Khaled Al-Mansour</span>
+            </div>
+          </div>
+        </div>
+        <!-- Popup Overlay -->
+        <div class="overlay">
+          <div class="popup">
+            <div class="popup-icon error">✕</div>
+            <h3 class="popup-title">IBAN Verification Failed</h3>
+            <p class="popup-msg">The IBAN owner name does not match your registered name. Refunds can only be transferred to an account under your name. Please use a different IBAN.</p>
+            <button class="popup-btn">Try Another IBAN</button>
+            <button class="popup-btn secondary" style="margin-top:8px;">Contact Support</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERROR 4: Pending Early/Partial Settlement -->
+    <div class="screen-wrapper">
+      <span class="screen-label">ERR-4: Conflicting Request</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Your Deal Details</p>
+          <div class="deal-card">
+            <div class="deal-id">Deal ID: <strong>#PF-2024-00891</strong></div>
+            <div class="deal-value">Personal Finance — SAR 150,000</div>
+          </div>
+        </div>
+        <!-- Popup Overlay -->
+        <div class="overlay">
+          <div class="popup">
+            <div class="popup-icon warning">⚠</div>
+            <h3 class="popup-title">Request Blocked</h3>
+            <p class="popup-msg">You have a pending <strong>Early Settlement</strong> request for this deal. A refund cannot be processed while another settlement request is active. Please wait for completion or cancel the existing request first.</p>
+            <button class="popup-btn">View Active Requests</button>
+            <button class="popup-btn secondary" style="margin-top:8px;">Go Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERROR 5: Installment Due Date Close -->
+    <div class="screen-wrapper">
+      <span class="screen-label">ERR-5: Installment Due Soon</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Review & Pay Fees</p>
+          <div class="fee-summary">
+            <div class="fee-row">
+              <span class="label">Refund Amount</span>
+              <span class="value">SAR 5,000.00</span>
+            </div>
+            <div class="fee-row">
+              <span class="label">Next Installment Due</span>
+              <span class="value" style="color:#ff8500;font-weight:600;">In 2 days</span>
+            </div>
+          </div>
+        </div>
+        <!-- Popup Overlay -->
+        <div class="overlay">
+          <div class="popup">
+            <div class="popup-icon warning">⚠</div>
+            <h3 class="popup-title">Installment Due Soon</h3>
+            <p class="popup-msg">Your next installment payment is due in <strong>2 days</strong>. Processing a refund now may affect your installment deduction. Are you sure you want to proceed?</p>
+            <button class="popup-btn">Proceed Anyway</button>
+            <button class="popup-btn secondary" style="margin-top:8px;">Cancel & Wait</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERROR 6: Fee Payment Failed -->
+    <div class="screen-wrapper">
+      <span class="screen-label">ERR-6: Fee Payment Failed</span>
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <span class="icons">📶 📡 🔋</span>
+        </div>
+        <div class="header">
+          <div class="back-btn">←</div>
+          <div class="logo">B</div>
+          <div class="header-icons"><span>🌐</span><span>🔔</span></div>
+        </div>
+        <div class="page-title">
+          <span class="chevron">‹</span>
+          <h1>Refund Request</h1>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">Review & Pay Fees</p>
+          <div class="fee-summary">
+            <div class="fee-row total">
+              <span class="label">Total Fees to Pay</span>
+              <span class="value">SAR 57.50</span>
+            </div>
+          </div>
+        </div>
+        <!-- Popup Overlay -->
+        <div class="overlay">
+          <div class="popup">
+            <div class="popup-icon error">✕</div>
+            <h3 class="popup-title">Payment Failed</h3>
+            <p class="popup-msg">We could not process the fee payment. This may be due to insufficient funds in your primary account or a temporary system issue. Please try again.</p>
+            <button class="popup-btn">Retry Payment</button>
+            <button class="popup-btn secondary" style="margin-top:8px;">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end error flow-container -->
+
+
+
+</body>
+</html>
