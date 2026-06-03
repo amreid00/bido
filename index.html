@@ -7,67 +7,268 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', sans-serif; background: #f5f6f8; min-height: 100vh; }
-    .header { background: #1a3054; padding: 40px 24px 32px; text-align: center; }
-    .header h1 { color: white; font-size: 32px; font-weight: 600; letter-spacing: -0.5px; }
-    .header p { color: rgba(255,255,255,0.7); font-size: 16px; margin-top: 8px; }
-    .header .logo { display: inline-block; width: 48px; height: 48px; background: rgba(255,255,255,0.15); border-radius: 8px; margin-bottom: 16px; line-height: 48px; color: white; font-size: 20px; font-weight: 700; }
-    .container { max-width: 1000px; margin: -24px auto 40px; padding: 0 24px; }
+    .header { background: #1a3054; padding: 32px 24px 24px; text-align: center; }
+    .header h1 { color: white; font-size: 28px; font-weight: 600; }
+    .header p { color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 6px; }
+    .header .logo { display: inline-block; width: 40px; height: 40px; background: rgba(255,255,255,0.15); border-radius: 8px; margin-bottom: 12px; line-height: 40px; color: white; font-size: 18px; font-weight: 700; }
+    .tabs { display: flex; justify-content: center; background: #152a48; padding: 0 24px; gap: 0; flex-wrap: wrap; }
+    .tab { padding: 14px 24px; color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .tab:hover { color: white; }
+    .tab.active { color: white; border-bottom-color: #00a7e1; }
+    .container { max-width: 1200px; margin: 24px auto; padding: 0 24px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    /* Cards */
     .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-    .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e6e7ea; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 12px; }
+    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e6e7ea; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 10px; }
     .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-    .card .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; width: fit-content; }
+    .card .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; width: fit-content; }
     .badge.retail { background: #e6f9f0; color: #00875a; }
-    .badge.common { background: #f0faff; color: #00a7e1; }
+    .badge.sme { background: #f0faff; color: #00a7e1; }
+    .badge.common { background: #f3e8ff; color: #7c3aed; }
     .badge.after-sales { background: #fff2e6; color: #ff8500; }
-    .card h3 { font-size: 18px; color: #20222f; font-weight: 600; }
-    .card p { font-size: 14px; color: #64656d; line-height: 1.5; }
-    .card .meta { display: flex; gap: 16px; font-size: 12px; color: #64656d; margin-top: auto; padding-top: 12px; border-top: 1px solid #f0f0f0; }
-    .card .view-btn { display: inline-flex; align-items: center; gap: 6px; color: #00a7e1; font-size: 14px; font-weight: 500; margin-top: 8px; text-decoration: none; }
+    .card h3 { font-size: 16px; color: #20222f; font-weight: 600; }
+    .card p { font-size: 13px; color: #64656d; line-height: 1.4; }
+    .card .meta { display: flex; gap: 12px; font-size: 11px; color: #64656d; margin-top: auto; padding-top: 10px; border-top: 1px solid #f0f0f0; }
+    .card .view-btn { display: inline-flex; align-items: center; gap: 6px; color: #00a7e1; font-size: 13px; font-weight: 500; margin-top: 6px; text-decoration: none; }
     .card .view-btn:hover { text-decoration: underline; }
-    .stats { display: flex; gap: 24px; justify-content: center; margin-top: 20px; margin-bottom: 32px; flex-wrap: wrap; }
-    .stat { background: white; border-radius: 8px; padding: 16px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e6e7ea; text-align: center; }
-    .stat .number { font-size: 28px; font-weight: 700; color: #00a7e1; }
-    .stat .label { font-size: 12px; color: #64656d; margin-top: 4px; }
-    footer { text-align: center; padding: 24px; font-size: 12px; color: #64656d; }
+    /* Tracker Table */
+    .tracker-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .tracker-table thead { background: #1a3054; }
+    .tracker-table th { padding: 12px 14px; text-align: left; color: white; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .tracker-table td { padding: 10px 14px; font-size: 13px; color: #20222f; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+    .tracker-table tr:hover { background: #f8f9fa; }
+    .tracker-table tr:last-child td { border-bottom: none; }
+    .status-pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .status-pill.inprogress { background: #fff2e6; color: #ff8500; }
+    .status-pill.updating { background: #f0faff; color: #00a7e1; }
+    .status-pill.new { background: #e6f9f0; color: #00875a; }
+    .priority-dot { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 700; color: white; }
+    .priority-dot.p1 { background: #e53e3e; }
+    .priority-dot.p2 { background: #ff8500; }
+    .priority-dot.p3 { background: #00a7e1; }
+    .priority-dot.p5 { background: #64656d; }
+    .channel-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: #f0f0f0; color: #64656d; text-transform: capitalize; }
+    .section-title { font-size: 18px; font-weight: 600; color: #1a3054; margin-bottom: 16px; }
+    .filter-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #e6e7ea; background: white; font-size: 12px; cursor: pointer; color: #64656d; }
+    .filter-btn.active { background: #00a7e1; color: white; border-color: #00a7e1; }
   </style>
 </head>
 <body>
   <div class="header">
     <div class="logo">B</div>
     <h1>Bidaya Wireframe Dashboard</h1>
-    <p>All wireframe flows for mobile app screens — click to view</p>
+    <p>Product flows, feature journeys &amp; tracking — all in one place</p>
   </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('products')">Product Journeys</div>
+    <div class="tab" onclick="switchTab('features')">Feature Journeys</div>
+    <div class="tab" onclick="switchTab('tracking')">Tracking &amp; Priority</div>
+  </div>
+
   <div class="container">
-    <div class="stats">
-      <div class="stat"><div class="number">1</div><div class="label">Total Flows</div></div>
-      <div class="stat"><div class="number">12</div><div class="label">Screens</div></div>
-      <div class="stat"><div class="number">6</div><div class="label">Error States</div></div>
-    </div>
-    <div class="card-grid">
-      <div class="card">
-        <span class="badge after-sales">After Sales</span>
-        <h3>Refund Process</h3>
-        <p>User requests a refund from their Virtual Account linked to a deal. Includes IBAN selection, fee payment, and error handling.</p>
-        <div class="meta">
-          <span>6 happy-path screens</span>
-          <span>6 error states</span>
+
+    <!-- TAB 1: Product Journeys -->
+    <div id="tab-products" class="tab-content active">
+      <h2 class="section-title">Product Journeys</h2>
+      <div class="card-grid">
+        <div class="card">
+          <span class="badge retail">Retail</span>
+          <h3>Personal Finance (PF)</h3>
+          <p>End-to-end personal finance application flow including income verification, offer generation, and document management.</p>
+          <div class="meta"><span>Mobile</span><span>Priority 1</span></div>
+          <a href="flows/refund-process.html" class="view-btn">View Flow →</a>
         </div>
-        <a href="flows/refund-process.html" class="view-btn">View Wireframe →</a>
+        <div class="card">
+          <span class="badge retail">Retail</span>
+          <h3>Retail Mortgage</h3>
+          <p>Mortgage application journey for retail customers.</p>
+          <div class="meta"><span>Mobile</span><span>New</span></div>
+        </div>
+        <div class="card">
+          <span class="badge sme">SME</span>
+          <h3>SME Mortgage</h3>
+          <p>CEO prototype for SME mortgage — updating on mobile and reflecting on branch.</p>
+          <div class="meta"><span>Mobile + Branch</span><span>Priority 1</span></div>
+        </div>
+        <div class="card">
+          <span class="badge sme">SME</span>
+          <h3>Invoice Discounting</h3>
+          <p>New flows with Kafala and without Kafala options.</p>
+          <div class="meta"><span>Mobile</span><span>Updating</span></div>
+        </div>
+        <div class="card">
+          <span class="badge sme">SME</span>
+          <h3>Working Capital</h3>
+          <p>Working capital finance flow for SME customers.</p>
+          <div class="meta"><span>Mobile</span><span>Priority 2</span></div>
+        </div>
+        <div class="card">
+          <span class="badge sme">SME</span>
+          <h3>POS Finance</h3>
+          <p>Point of Sale financing — new flows with Kafala and without Kafala.</p>
+          <div class="meta"><span>Mobile</span><span>Updating</span></div>
+        </div>
+        <div class="card">
+          <span class="badge retail">Retail</span>
+          <h3>Fleet Finance</h3>
+          <p>Fleet financing journey for retail customers.</p>
+          <div class="meta"><span>New</span></div>
+        </div>
+        <div class="card">
+          <span class="badge retail">Retail</span>
+          <h3>Merchant Finance</h3>
+          <p>Merchant financing application flow.</p>
+          <div class="meta"><span>New</span></div>
+        </div>
+        <div class="card">
+          <span class="badge retail">Retail</span>
+          <h3>Refinance</h3>
+          <p>Refinancing flow — comments added, updating in progress.</p>
+          <div class="meta"><span>Mobile</span><span>Priority 1</span></div>
+        </div>
       </div>
-      <div class="card" style="border-style: dashed; opacity: 0.5;">
-        <span class="badge retail">Retail</span>
-        <h3>Early Settlement</h3>
-        <p>Coming soon — Early settlement flow for personal finance deals.</p>
-        <div class="meta"><span>Planned</span></div>
+    </div>
+
+    <!-- TAB 2: Feature Journeys -->
+    <div id="tab-features" class="tab-content">
+      <h2 class="section-title">Feature Journeys</h2>
+      <div class="card-grid">
+        <div class="card">
+          <span class="badge after-sales">After Sales</span>
+          <h3>Refund Process</h3>
+          <p>User requests a refund from their VA linked to a deal. Includes IBAN selection, fee payment, and error handling.</p>
+          <div class="meta"><span>6 screens</span><span>6 error states</span></div>
+          <a href="flows/refund-process.html" class="view-btn">View Wireframe →</a>
+        </div>
+        <div class="card">
+          <span class="badge after-sales">After Sales</span>
+          <h3>Early Settlement</h3>
+          <p>Update flow to match new requirements for automation.</p>
+          <div class="meta"><span>Mobile</span><span>Updating</span></div>
+        </div>
+        <div class="card">
+          <span class="badge after-sales">After Sales</span>
+          <h3>Advanced Payment</h3>
+          <p>Update new screens for advanced payment flow.</p>
+          <div class="meta"><span>Mobile</span><span>Updating</span></div>
+        </div>
+        <div class="card">
+          <span class="badge after-sales">After Sales</span>
+          <h3>After Sales - Working Capital</h3>
+          <p>Reviewing in progress, adding new refund flow.</p>
+          <div class="meta"><span>Mobile</span><span>Priority 2</span></div>
+        </div>
+        <div class="card">
+          <span class="badge after-sales">After Sales</span>
+          <h3>SME Mortgage After Sales</h3>
+          <p>After sales flow for SME mortgage product.</p>
+          <div class="meta"><span>Both</span><span>Priority 5</span></div>
+        </div>
+        <div class="card">
+          <span class="badge common">Common</span>
+          <h3>Content Creation (3D Icons + Images)</h3>
+          <p>Create all content including 3D icons and images for all products. Still in progress with Majed.</p>
+          <div class="meta"><span>Both</span><span>Priority 1</span></div>
+        </div>
+        <div class="card">
+          <span class="badge common">Common</span>
+          <h3>Retail User Profile</h3>
+          <p>Adding new screens for profile details.</p>
+          <div class="meta"><span>Mobile</span><span>Priority 2</span></div>
+        </div>
+        <div class="card">
+          <span class="badge common">Common</span>
+          <h3>SME User / Company Profile</h3>
+          <p>Adding new screens for SME profile and company details.</p>
+          <div class="meta"><span>Mobile</span><span>Priority 2</span></div>
+        </div>
+        <div class="card">
+          <span class="badge common">Common</span>
+          <h3>Branch Features</h3>
+          <p>User Profile, cancellation request, loan history for branch channel.</p>
+          <div class="meta"><span>Branch</span><span>Priority 3</span></div>
+        </div>
+        <div class="card">
+          <span class="badge common">Common</span>
+          <h3>Freelance Verification</h3>
+          <p>Freelance certificate verification flow.</p>
+          <div class="meta"><span>Branch</span><span>Priority 3</span></div>
+        </div>
+        <div class="card">
+          <span class="badge common">Common</span>
+          <h3>Document Management</h3>
+          <p>Update document management flow.</p>
+          <div class="meta"><span>Mobile</span><span>Updating</span></div>
+        </div>
+        <div class="card">
+          <span class="badge common">Common</span>
+          <h3>Transaction History</h3>
+          <p>Add empty state screen for transaction history.</p>
+          <div class="meta"><span>Mobile</span><span>Updating</span></div>
+        </div>
       </div>
-      <div class="card" style="border-style: dashed; opacity: 0.5;">
-        <span class="badge retail">Retail</span>
-        <h3>Partial Settlement</h3>
-        <p>Coming soon — Partial settlement payment flow.</p>
-        <div class="meta"><span>Planned</span></div>
+    </div>
+
+    <!-- TAB 3: Tracking & Priority -->
+    <div id="tab-tracking" class="tab-content">
+      <h2 class="section-title">Tracking &amp; Priority</h2>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterTable('all')">All</button>
+        <button class="filter-btn" onclick="filterTable('inprogress')">In Progress</button>
+        <button class="filter-btn" onclick="filterTable('updating')">Updating</button>
+        <button class="filter-btn" onclick="filterTable('new')">New</button>
       </div>
+      <table class="tracker-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Product / Feature</th>
+            <th>Priority</th>
+            <th>Comments</th>
+            <th>Status</th>
+            <th>Channel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-status="inprogress"><td>1</td><td>Create all content (3D Icons + Images for all products)</td><td><span class="priority-dot p1">1</span></td><td>Still in progress with Majed</td><td><span class="status-pill inprogress">In Progress</span></td><td><span class="channel-tag">Both</span></td></tr>
+          <tr data-status="updating"><td>2</td><td>After Sales - PF</td><td><span class="priority-dot p1">1</span></td><td>Update new screens for advanced payment, add empty state screen for transaction history, update Early Settlement flow, update payments flow, update Document Management flow</td><td><span class="status-pill updating">Updating</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="updating"><td>3</td><td>SME Mortgage CEO Prototype</td><td><span class="priority-dot p1">1</span></td><td>Updating on mobile and to reflect on the branch</td><td><span class="status-pill updating">Updating</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="inprogress"><td>4</td><td>Complete Branch Features</td><td><span class="priority-dot p3">3</span></td><td>User Profile - Cancellation Request - Loan History</td><td><span class="status-pill inprogress">In Progress</span></td><td><span class="channel-tag">Branch</span></td></tr>
+          <tr data-status="updating"><td>5</td><td>Invoice Discounting</td><td><span class="priority-dot p1">1</span></td><td>Add new flow with Kafala and without Kafala</td><td><span class="status-pill updating">Updating</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="inprogress"><td>6</td><td>After Sales - Working Capital</td><td><span class="priority-dot p2">2</span></td><td>In progress for reviewing, will add new flow for refund</td><td><span class="status-pill inprogress">In Progress</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="updating"><td>7</td><td>Refinance Flow</td><td><span class="priority-dot p1">1</span></td><td>Added some comments</td><td><span class="status-pill updating">Updating</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="updating"><td>8</td><td>POS</td><td><span class="priority-dot p1">1</span></td><td>Add new flow with Kafala and without Kafala</td><td><span class="status-pill updating">Updating</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="updating"><td>9</td><td>PF</td><td><span class="priority-dot p1">1</span></td><td>Add new form</td><td><span class="status-pill updating">Updating</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="new"><td>10</td><td>Retail User Management - Profile Details</td><td><span class="priority-dot p2">2</span></td><td>Adding new screens for profile</td><td><span class="status-pill new">New</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="new"><td>11</td><td>SME User Management - Profile / Company</td><td><span class="priority-dot p2">2</span></td><td>Adding new screens for profile</td><td><span class="status-pill new">New</span></td><td><span class="channel-tag">Mobile</span></td></tr>
+          <tr data-status="new"><td>12</td><td>Retail Mortgage Flow</td><td></td><td></td><td><span class="status-pill new">New</span></td><td></td></tr>
+          <tr data-status="new"><td>13</td><td>Fleet Finance Flow</td><td></td><td></td><td><span class="status-pill new">New</span></td><td></td></tr>
+          <tr data-status="new"><td>14</td><td>Merchant Flow</td><td></td><td></td><td><span class="status-pill new">New</span></td><td></td></tr>
+          <tr data-status="new"><td>15</td><td>SME Mortgage After Sales Flow</td><td><span class="priority-dot p5">5</span></td><td></td><td><span class="status-pill new">New</span></td><td><span class="channel-tag">Both</span></td></tr>
+          <tr data-status="new"><td>16</td><td>After Sales - Working Capital (Branch)</td><td><span class="priority-dot p5">5</span></td><td></td><td><span class="status-pill new">New</span></td><td><span class="channel-tag">Branch</span></td></tr>
+          <tr data-status="new"><td>17</td><td>Freelance Verification Flow</td><td><span class="priority-dot p3">3</span></td><td></td><td><span class="status-pill new">New</span></td><td><span class="channel-tag">Branch</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
-  <footer>Bidaya Fintech Platform — Wireframe Repository</footer>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
+    }
+    function filterTable(status) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      document.querySelectorAll('.tracker-table tbody tr').forEach(row => {
+        if (status === 'all') { row.style.display = ''; }
+        else { row.style.display = row.dataset.status === status ? '' : 'none'; }
+      });
+    }
+  </script>
 </body>
 </html>
